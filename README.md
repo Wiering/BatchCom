@@ -230,7 +230,7 @@ There are two ways to run an external program:
 - Type the full pathname and extension ("C:\UTIL\BC.EXE"). Use this
   method if you want to know what errorlevel is left by the program.
 
-# EXAMPLES
+## EXAMPLES
 
 To learn more about BATCHCOM, take a look at the examples in the EXAMPLES folder. 
 BATCHCOM programs usually have the extension .BC, because they can't be run as normal .BAT files.
