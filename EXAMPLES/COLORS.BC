@@ -1,0 +1,24 @@
+rem BATCHCOM color demo
+
+crt
+var i
+var j = 0
+var k
+var l
+
+:Line
+let i = 0
+
+:Col
+let k = i
+let l = j
+mul l, 16
+add k, l
+SetColor k
+echo  %k:3d%$
+add i, 1
+if %i% < 16 GoTo Col
+SetColor 7
+echo.
+add j, 1
+if %j% < 16 GoTo Line

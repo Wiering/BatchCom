@@ -1,0 +1,114 @@
+REM BATCHCOM demonstration game
+REM
+REM To run, first compile it with the command: BATCHCOM game.bc <Enter>
+REM Then type GAME <Enter>.
+
+CRT
+CLS
+ECHO
+ECHO In this game you are driving a car, that looks like this: $(219).
+ECHO You can go right or left using the $(26) and $(27) arrow keys.
+ECHO Try not to hit oncoming cars ($(176)$(176)$(176)).
+ECHO
+PAUSE Hit any key to start ... 
+GOTO StartGame
+
+VAR Position
+VAR EL
+VAR Crashed
+VAR Key
+VAR Delay = 40
+VAR Score
+VAR HighScore
+
+:DrawCar
+   MOVETO Position, 24
+   ECHO $(219)
+RETURN
+
+:DrawRoad
+   MOVETO 1, 1
+   ECHO $(222)
+   MOVETO 80, 1
+   ECHO $(221)
+RETURN
+
+:PlaceOncomingCar
+   GETRANDOM
+   LET EL = ErrorLevel
+   IF %EL% > 76 GOTO PlaceOncomingCar
+   IF %EL% <  2 GOTO PlaceOncomingCar
+   MOVETO EL, 1
+   ECHO $(176)$(176)$(176)
+RETURN
+
+:ReadFromScreen
+   REM  This subroutine sets the ErrorLevel to
+   REM  the ASCII number of the character on the
+   REM  screen at the cursor position
+   REM
+   INLINE  b4 08        ; MOV AH, 8
+   INLINE  b7 00        ; MOV BH, 0
+   INLINE  cd 10        ; INT 10h
+   INLINE  a2 7c 01     ; MOV BYTE PTR [017Ch], AL   ; set the errorlevel
+RETURN
+
+:CheckCrash
+   MOVETO Position, 23
+   GOSUB ReadFromScreen
+   LET EL = ErrorLevel
+   IF %EL% = 176 LET Crashed = 1
+RETURN
+
+:Delay
+   LET EL = 0
+:Wait
+   INC EL
+   IF %EL% < %Delay% GOTO Wait
+RETURN
+
+:StartGame
+CLS
+LET Crashed = 0
+LET Position = 40   
+LET Score = 0
+:Loop
+   IF NOT KEYPRESSED GOTO NoKey
+   GETKEY
+   IF ERRORLEVEL 1 GOTO NoKey
+   GETKEY
+   LET Key = ErrorLevel
+   IF %Key% = 75 DEC Position
+   IF %Key% = 77 INC Position
+   IF %Position% > 79 LET Position = 79
+   IF %Position% <  2 LET Position =  2
+:NoKey
+   GOSUB DrawRoad
+   GOSUB DrawCar
+   GOSUB Delay
+   GOSUB CheckCrash
+   IF %Crashed% = 1 GOTO End
+   GOSUB Delay
+   SCROLL -1
+   GOSUB DrawOncomingCar
+   ADD Score, 10
+   GOTO Loop
+:End
+BEEP
+SETWINDOW 50, 5, 74, 12
+CLS
+FRAMEWINDOW DOUBLEFRAME
+IF NOT %Score% > %HighScore% GOTO NotHighScore
+MOVETO 52, 7
+ECHO NEW HIGH SCORE !!!
+LET HighScore = Score
+:NotHighScore
+SETWINDOW 1, 1, 80, 25
+MOVETO 52, 9
+ECHO Score:      %Score:09%
+MOVETO 52, 10
+ECHO High score: %HighScore:09%
+MOVETO 1, 25
+ASKYN "Play again (y/n)? "
+IF ERRORLEVEL 1 GOTO StartGame
+CLS

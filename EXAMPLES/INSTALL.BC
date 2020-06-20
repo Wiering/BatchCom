@@ -1,0 +1,259 @@
+rem  Installation program for TRAINS
+rem
+rem  This is just an example of an installation program written using
+rem  BATCHCOM. This program demonstrates the use of menus. It was made
+rem  for a school project TRAINS (not included), which was compressed
+rem  on a diskette. This installation program asks for a directory and
+rem  installs (uncompresses) the files.
+rem
+rem  To compile type: BATCHCOM INSTALL.BC
+
+
+Crt
+
+GoTo main
+
+Var OldCursorX
+var OldCursorY
+Var Choice
+
+:Init
+   SwapScreen
+   SetWindow 17, 5, 67, 8
+   SetColor $08
+   FillWindow 32
+   SetWindow 15, 4, 65, 7
+   SetColor $7F
+   FillWindow 32
+   FrameWindow DoubleFrame
+   SetColor $7E
+   MoveTo 29, 5
+   echo Train demo version 1.0$
+   MoveTo 30, 6
+   echo Installation program$
+return
+
+
+:Disk1
+   SetColor $1F
+   cls
+   echo Please insert disk #1 into drive %DRIVE% and press a key ...
+   GetKey
+   if not exist %DRIVE%DISK1.DSK goto Disk1
+return
+
+:Disk2
+   SetColor $1F
+   cls
+   echo Please insert disk #2 into drive %DRIVE% and press a key ...
+   GetKey
+   if not exist %DRIVE%DISK2.DSK goto Disk2
+return
+
+
+:RunMenu
+   SetWindow 12, 11, 72, 22
+   SetColor $08
+   FillWindow 32
+   SetWindow 10, 10, 70, 21
+   SetColor $7F
+   FillWindow 32
+   FrameWindow DoubleFrame
+   SetColor $71
+   MoveTo 30, 12
+   echo Select your choice ...$
+   MoveTo 14, 18
+   echo Type a number [1..3] or move the highlighted bar with
+   MoveTo 22, 19
+   echo the arrow keys ($(24)$(25)) and press [Enter]
+   SetColor $70
+   SetWindow 13, 14, 67, 19
+   Menu $4F, $70, $4F, [  ~1~     Install the TRAIN demo on a harddisk/  ~2~     Copy the complete source of this demo/  ~3~     Exit installation program and return to DOS]
+   let Choice = ErrorLevel
+return
+
+
+:WriteKey
+   rem Write down arrow key to keyboard buffer
+   inline  B4 05     ; mov ah,5
+   inline  B9 00 50  ; mov cx,5000h
+   inline  CD 16     ; int 16h
+return
+
+
+:PutTRAINS
+   inline  B4 05
+   inline  B9 43 00  ; "C"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 3A 00  ; ":"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 5C 00  ; "\"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 54 00  ; "T"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 52 00  ; "R"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 41 00  ; "A"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 49 00  ; "I"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 4E 00  ; "N"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 53 00  ; "S"
+   inline  CD 16
+return
+
+
+:PutTRNSRC
+   inline  B4 05
+   inline  B9 43 00  ; "C"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 3A 00  ; ":"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 5C 00  ; "\"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 54 00  ; "T"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 52 00  ; "R"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 4E 00  ; "N"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 53 00  ; "S"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 52 00  ; "R"
+   inline  CD 16
+   inline  B4 05
+   inline  B9 43 00  ; "C"
+   inline  CD 16
+return
+
+
+:Installation
+   SetWindow 15, 13, 68, 19
+   SetColor $08
+   FillWindow 32
+   SetWindow 13, 12, 66, 18
+   SetColor $1F
+   FillWindow 32
+   FrameWindow DoubleFrame,Í Installation Í
+   MoveTo 19, 14
+   echo Enter destination drive and new pathname:
+   SetWindow 16, 16, 63, 16
+   MoveTo 16, 16
+   SetColor $3F
+   GoSub PutTRAINS
+
+   Input DIR
+   if errorlevel 255 GoTo InstDone
+
+   CheckErrors off
+   mkdir %DIR%
+   if not errorlevel 1 goto NewDir
+   CheckErrors on
+
+   SetWindow 25, 13, 58, 18
+   SetColor $08
+   FillWindow 32
+   SetWindow 23, 12, 56, 17
+   SetColor $4F
+   FillWindow 32
+   FrameWindow DoubleFrame,Í Error Í
+   MoveTo 27, 14
+   echo Invalid directory name or
+   MoveTo 27, 15
+   echo directory already exists.$
+   GetKey
+   GoTo Installation
+
+:NewDir
+   CheckErrors on
+ rem a:rar.exe x a:data.rar %DIR%
+
+:InstDone
+return
+
+
+:CopySource
+   SetWindow 15, 13, 68, 19
+   SetColor $08
+   FillWindow 32
+   SetWindow 13, 12, 66, 18
+   SetColor $1F
+   FillWindow 32
+   FrameWindow DoubleFrame,Í Copy source files ... Í
+   MoveTo 19, 14
+   echo Enter destination drive and new pathname:
+   SetWindow 16, 16, 63, 16
+   MoveTo 16, 16
+   SetColor $3F
+   GoSub PutTRNSRC
+
+   Input DIR
+   if errorlevel 255 GoTo CopyDone
+
+   CheckErrors off
+   mkdir %DIR%
+   if not errorlevel 1 goto DirOK
+   CheckErrors on
+
+   SetWindow 25, 13, 58, 18
+   SetColor $08
+   FillWindow 32
+   SetWindow 23, 12, 56, 17
+   SetColor $4F
+   FillWindow 32
+   FrameWindow DoubleFrame,Í Error Í
+   MoveTo 27, 14
+   echo Invalid directory name or
+   MoveTo 27, 15
+   echo directory already exists.$
+   GetKey
+   GoTo CopySource
+
+:DirOK
+   CheckErrors on
+ rem rar x a:source.rar %DIR%
+
+   :CopyDone
+   GoSub WriteKey
+return
+
+
+:main
+   GetDrive DRIVE
+   LoadScreen BLUE.DAT
+   GetX OldCursorX
+   GetY OldCursorY
+   gosub Init
+
+:Menu
+   gosub RunMenu
+   if %Choice% == 0 goto Exit
+   if %Choice% == 1 gosub Installation
+   if %Choice% == 2 gosub CopySource
+   if %Choice% == 3 goto Exit
+   goto Menu
+
+:Exit
+   SetColor $07
+   SetWindow 1, 1, 80, 25
+   cls
+   MoveTo 1, 1
+
+   PutScreen
+   MoveTo OldCursorX, OldCursorY
