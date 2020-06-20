@@ -7,7 +7,7 @@ BATCHCOM was designed to work with DOS 3.30, so some newer command options
 (found in DOS 5 or 6 and Windows NT, etc.) are not supported. However,
 with the extra commands, BATCHCOM is like a complete programming language.
 
-Written in Turbo Pascal in 1992. To try this program, use DosBox-X.
+Written in Turbo Pascal in 1992. To run this program now, use DosBox-X or VirtualBox.
 
 ## Usage
 
