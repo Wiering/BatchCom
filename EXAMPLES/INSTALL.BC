@@ -150,7 +150,7 @@ return
    SetWindow 13, 12, 66, 18
    SetColor $1F
    FillWindow 32
-   FrameWindow DoubleFrame,Õ Installation Õ
+   FrameWindow DoubleFrame,‚ïê Installation ‚ïê
    MoveTo 19, 14
    echo Enter destination drive and new pathname:
    SetWindow 16, 16, 63, 16
@@ -172,7 +172,7 @@ return
    SetWindow 23, 12, 56, 17
    SetColor $4F
    FillWindow 32
-   FrameWindow DoubleFrame,Õ Error Õ
+   FrameWindow DoubleFrame,‚ïê Error ‚ïê
    MoveTo 27, 14
    echo Invalid directory name or
    MoveTo 27, 15
@@ -195,7 +195,7 @@ return
    SetWindow 13, 12, 66, 18
    SetColor $1F
    FillWindow 32
-   FrameWindow DoubleFrame,Õ Copy source files ... Õ
+   FrameWindow DoubleFrame,‚ïê Copy source files ... ‚ïê
    MoveTo 19, 14
    echo Enter destination drive and new pathname:
    SetWindow 16, 16, 63, 16
@@ -217,7 +217,7 @@ return
    SetWindow 23, 12, 56, 17
    SetColor $4F
    FillWindow 32
-   FrameWindow DoubleFrame,Õ Error Õ
+   FrameWindow DoubleFrame,‚ïê Error ‚ïê
    MoveTo 27, 14
    echo Invalid directory name or
    MoveTo 27, 15
