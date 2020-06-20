@@ -1,7 +1,7 @@
 REM BATCHCOM demonstration game
 REM
-REM To run, first compile it with the command: BATCHCOM game.bc <Enter>
-REM Then type GAME <Enter>.
+REM To run, first compile it with the command: BATCHCOM cardrive.bc <Enter>
+REM Then type CARDRIVE <Enter>.
 
 CRT
 CLS
